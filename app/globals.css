@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/*
+ * Design token Loory Token (CLAUDE.md bagian 7)
+ * Tiga lapisan: primitive (nilai mentah) -> semantic (fungsi) -> component (per komponen).
+ * Semua komponen hanya memakai utility Tailwind yang dibangkitkan dari token di bawah,
+ * atau custom property component. Jangan menulis hex langsung di komponen.
+ */
+
+/* ---------- Lapisan 1: primitive ---------- */
+:root {
+  --p-ink-900: #1e2830;
+  --p-ink-800: #28343d;
+  --p-ink-700: #33414b;
+  --p-steel-600: #42515c;
+  --p-steel-500: #5b6872;
+  --p-steel-300: #9aa5ad;
+  --p-gray-300: #d5dade;
+  --p-gray-200: #e3e7ea;
+  --p-gray-150: #e9ecee;
+  --p-gray-100: #f3f5f6;
+  --p-white: #ffffff;
+
+  --p-yellow-500: #f5b800;
+  --p-yellow-600: #dca600;
+
+  --p-amber-800: #8a5e00;
+  --p-amber-100: #fff2c7;
+  --p-blue-700: #1f5fa8;
+  --p-blue-100: #e2ecf8;
+  --p-green-700: #2c7a4b;
+  --p-green-100: #dff1e5;
+  --p-gray-700: #4a5560;
+  --p-red-700: #b3261e;
+  --p-red-50: #fbeae8;
+}
+
+/* ---------- Lapisan 2: semantic (menjadi utility Tailwind) ---------- */
+@theme inline {
+  /* Permukaan dan teks */
+  --color-ink: var(--p-ink-900);
+  --color-ink-raised: var(--p-ink-800);
+  --color-ink-line: var(--p-ink-700);
+  --color-steel: var(--p-steel-600);
+  --color-muted: var(--p-steel-500);
+  --color-on-ink-muted: var(--p-steel-300);
+  --color-ground: var(--p-gray-150);
+  --color-panel: var(--p-white);
+  --color-subtle: var(--p-gray-100);
+  --color-line: var(--p-gray-300);
+  --color-line-soft: var(--p-gray-200);
+
+  /* Aksen: hanya aksi utama, menu aktif, dan garis hazard */
+  --color-accent: var(--p-yellow-500);
+  --color-accent-hover: var(--p-yellow-600);
+
+  /* Status, sama di semua halaman */
+  --color-menunggu: var(--p-amber-800);
+  --color-menunggu-bg: var(--p-amber-100);
+  --color-dimuat: var(--p-blue-700);
+  --color-dimuat-bg: var(--p-blue-100);
+  --color-selesai: var(--p-green-700);
+  --color-selesai-bg: var(--p-green-100);
+  --color-netral: var(--p-gray-700);
+  --color-netral-bg: var(--p-gray-200);
+  --color-error: var(--p-red-700);
+  --color-error-bg: var(--p-red-50);
+
+  /* Tipografi: Archivo untuk teks, Archivo Narrow untuk judul dan angka besar */
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo-narrow), var(--font-archivo), ui-sans-serif, sans-serif;
+
+  /* Radius kecil saja (4 sampai 6 px). Ukuran besar dibatasi agar tidak ada kartu membulat. */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 8px;
+}
+
+/* ---------- Lapisan 3: component ---------- */
+:root {
+  --sidebar-width: 272px;
+  --header-height: 80px;
+  --hazard-size: 14px;
+  --control-height: 44px;
+  --control-height-sm: 36px;
+  --plate-border: 2px;
+}
+
+/* ---------- Dasar ---------- */
+@layer base {
+  html {
+    background-color: var(--color-ground);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+}
+
+/* ---------- Elemen khas ---------- */
+@layer components {
+  /* Garis hazard kuning-hitam diagonal (rambu area muat) */
+  .hazard {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--color-accent) 0 var(--hazard-size),
+      var(--color-ink) var(--hazard-size) calc(var(--hazard-size) * 2)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

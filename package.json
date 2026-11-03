@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:setup": "node scripts/db-setup.mjs",
-    "db:slot": "node scripts/db-slot.mjs"
+    "db:slot": "node scripts/db-slot.mjs",
+    "db:contoh": "node scripts/db-contoh.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

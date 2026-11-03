@@ -76,3 +76,21 @@ export function formatAngka(value: number): string {
 export function toIsoDate(date: Date): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
+
+/** Selisih menit antara dua DATETIME (dibulatkan ke bawah, minimal 0). */
+export function selisihMenit(dari: string, sampai: string): number {
+  return Math.max(0, Math.floor((parseWaktu(sampai).getTime() - parseWaktu(dari).getTime()) / 60000));
+}
+
+/** 25 menjadi "25 menit", 95 menjadi "1 jam 35 menit" */
+export function formatDurasi(menit: number): string {
+  if (menit < 60) return `${menit} menit`;
+  if (menit >= 24 * 60) {
+    const hari = Math.floor(menit / (24 * 60));
+    const sisaJam = Math.floor((menit % (24 * 60)) / 60);
+    return sisaJam === 0 ? `${hari} hari` : `${hari} hari ${sisaJam} jam`;
+  }
+  const jam = Math.floor(menit / 60);
+  const sisa = menit % 60;
+  return sisa === 0 ? `${jam} jam` : `${jam} jam ${sisa} menit`;
+}

@@ -9,12 +9,12 @@ export function PageHeader({ role, userName, title }: { role: Role; userName: st
   const heading = title ?? findNavItem(role, pathname)?.title ?? "Loory Token System";
 
   return (
-    <header className="border-b border-line bg-panel">
+    <header className="border-b border-line bg-panel print:hidden">
       <div className="flex min-h-16 items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:min-h-[var(--header-height)] lg:px-10">
         <h1 className="font-display text-[1.625rem] font-bold leading-tight tracking-[-0.015em] lg:text-[2.125rem]">
           {heading}
         </h1>
-        <div className="hidden text-right sm:block">
+        <div className="hidden text-right sm:block print:hidden">
           <p className="font-semibold leading-snug">{userName}</p>
           <p className="text-[0.9375rem] leading-snug text-muted">{ROLE_LABEL[role]}</p>
         </div>

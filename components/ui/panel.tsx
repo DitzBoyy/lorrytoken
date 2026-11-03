@@ -33,7 +33,7 @@ export function PanelHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1", className)}>
+    <div className={cn("mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3", className)}>
       <h2 id={id} className="font-display text-[1.5rem] font-bold leading-tight tracking-[-0.01em]">
         {title}
       </h2>

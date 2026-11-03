@@ -10,7 +10,7 @@ import { Plate } from "@/components/ui/plate";
 import { StatusTag } from "@/components/ui/status-tag";
 import { Missing, Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
 import { cn } from "@/lib/cn";
-import { formatJamDari } from "@/lib/format";
+import { formatDurasi, formatJamDari, selisihMenit } from "@/lib/format";
 import type { AntrianMenunggu, DockMonitor, Monitoring } from "@/lib/petugas";
 import { usePolling } from "@/lib/use-polling";
 
@@ -84,6 +84,7 @@ export function MonitoringView({ initial }: { initial: Monitoring }) {
                 dock={dock}
                 terdepan={terdepan}
                 utama={dock.id_dock === dockUtama}
+                sekarang={data.diperbarui}
                 sibuk={proses !== null}
                 onAlokasi={() => terdepan && alokasi(terdepan, dock.id_dock)}
                 onSelesai={() => {
@@ -222,6 +223,7 @@ function DockCard({
   dock,
   terdepan,
   utama,
+  sekarang,
   sibuk,
   onAlokasi,
   onSelesai,
@@ -229,6 +231,8 @@ function DockCard({
   dock: DockMonitor;
   terdepan: AntrianMenunggu | null;
   utama: boolean;
+  /** Waktu server saat data diambil, untuk menghitung lama pemuatan */
+  sekarang: string;
   sibuk: boolean;
   onAlokasi: () => void;
   onSelesai: () => void;
@@ -265,6 +269,11 @@ function DockCard({
               <p className="text-[0.9375rem] text-muted tabular-nums">
                 {dock.nomor_antrian} · mulai {dock.waktu_mulai ? formatJamDari(dock.waktu_mulai) : ""}
               </p>
+              {dock.waktu_mulai && (
+                <p className="text-[0.9375rem] font-semibold text-dimuat tabular-nums">
+                  Berjalan {formatDurasi(selisihMenit(dock.waktu_mulai, sekarang))}
+                </p>
+              )}
             </div>
             <Button variant="secondary" fullWidth className="mt-auto justify-start" disabled={sibuk} onClick={onSelesai}>
               Selesai<span className="sr-only"> memuat {dock.nomor_antrian}</span>

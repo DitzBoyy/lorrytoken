@@ -1,5 +1,12 @@
-import { PagePlaceholder } from "@/components/layout/page-placeholder";
+import type { Metadata } from "next";
+import { requirePageRole } from "@/lib/auth";
+import { getDaftarPetugas } from "@/lib/data/manajemen";
+import { PenggunaView } from "./pengguna-view";
 
-export default function Page() {
-  return <PagePlaceholder />;
+export const metadata: Metadata = { title: "Data Pengguna" };
+
+export default async function PenggunaPage() {
+  await requirePageRole("manajemen");
+  const petugas = await getDaftarPetugas();
+  return <PenggunaView petugas={petugas} />;
 }

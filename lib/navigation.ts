@@ -36,7 +36,7 @@ export const NAV: Record<Role, NavItem[]> = {
   ],
   manajemen: [
     { href: "/manajemen/dashboard", label: "Dashboard Antrian", title: "Dashboard Antrian" },
-    { href: "/manajemen/laporan", label: "Laporan", title: "Laporan" },
+    { href: "/manajemen/laporan", label: "Laporan", title: "Laporan Antrian" },
     { href: "/manajemen/pengguna", label: "Data Pengguna", title: "Data Pengguna" },
   ],
 };

@@ -14,7 +14,7 @@ export type ShellUser = { nama: string; role: Role };
  */
 export function AppShell({ user, title, children }: { user: ShellUser; title?: string; children: ReactNode }) {
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]">
+    <div className="min-h-screen lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] print:block">
       <a
         href="#konten"
         className="sr-only z-50 bg-accent px-4 py-3 font-semibold text-ink focus:not-sr-only focus:fixed focus:top-2 focus:left-2"

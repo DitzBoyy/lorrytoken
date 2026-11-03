@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, buttonClass } from "@/components/ui/button";
+import { DateTabs } from "@/components/ui/date-tabs";
 import { SelectField } from "@/components/ui/field";
 import { EmptyState, Notice } from "@/components/ui/notice";
 import { Panel, PanelHeader } from "@/components/ui/panel";
 import { cn } from "@/lib/cn";
 import type { SlotKuota } from "@/lib/data/slot";
-import { formatRentang, formatTabTanggal, formatTanggalPanjang } from "@/lib/format";
+import { formatRentang, formatTanggalPanjang } from "@/lib/format";
 import { labelTruk, type Truk } from "@/lib/truk";
 
 type Berhasil = { kode: string; rentang: string; tanggal: string };
@@ -104,32 +105,7 @@ export function PemesananView({
               </p>
             )}
           </div>
-          {daftarTanggal.length > 0 && (
-            <nav aria-label="Pilih tanggal" className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-              <ul className="flex gap-2">
-                {daftarTanggal.map((item) => {
-                  const aktif = item === tanggal;
-                  return (
-                    <li key={item}>
-                      <Link
-                        href={`/sopir/pemesanan?tanggal=${item}`}
-                        replace
-                        scroll={false}
-                        aria-current={aktif ? "date" : undefined}
-                        aria-label={formatTanggalPanjang(item)}
-                        className={cn(
-                          "inline-flex h-11 items-center rounded-sm border px-4 font-semibold whitespace-nowrap transition-colors duration-150",
-                          aktif ? "border-ink bg-ink text-white" : "border-steel bg-panel text-ink hover:bg-subtle",
-                        )}
-                      >
-                        {formatTabTanggal(item)}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-          )}
+          {daftarTanggal.length > 0 && <DateTabs hrefBase="/sopir/pemesanan" tanggal={daftarTanggal} aktif={tanggal} />}
         </div>
 
         {!tanggal ? (

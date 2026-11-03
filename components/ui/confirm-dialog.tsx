@@ -18,6 +18,7 @@ export function ConfirmDialog({
   error,
   onConfirm,
   onClose,
+  tone = "danger",
 }: {
   open: boolean;
   title: string;
@@ -28,6 +29,8 @@ export function ConfirmDialog({
   error?: string | null;
   onConfirm: () => void;
   onClose: () => void;
+  /** "danger" untuk hapus atau batal, "primary" untuk aksi rutin seperti menandai selesai. */
+  tone?: "danger" | "primary";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -59,7 +62,7 @@ export function ConfirmDialog({
           <Button variant="secondary" onClick={onClose} disabled={loading}>
             {cancelLabel}
           </Button>
-          <Button variant="danger" onClick={onConfirm} loading={loading} loadingText="Memproses">
+          <Button variant={tone} onClick={onConfirm} loading={loading} loadingText="Memproses">
             {confirmLabel}
           </Button>
         </div>

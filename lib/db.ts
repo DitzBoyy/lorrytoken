@@ -1,5 +1,5 @@
 import "server-only";
-import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
+import mysql, { type Pool, type PoolConnection, type RowDataPacket } from "mysql2/promise";
 
 /**
  * Pool koneksi MySQL (XAMPP). Disimpan di globalThis agar hot reload saat `npm run dev`
@@ -34,6 +34,37 @@ export async function withTransaction<T>(fn: (conn: PoolConnection) => Promise<T
   } catch (error) {
     await conn.rollback();
     throw error;
+  } finally {
+    conn.release();
+  }
+}
+
+/**
+ * Transaksi yang dijaga kunci bernama MySQL (GET_LOCK). Kunci baru dilepas setelah commit atau rollback,
+ * sehingga proses lain yang menunggu kunci sudah bisa membaca data yang baru disimpan.
+ */
+export async function withLockedTransaction<T>(
+  lockName: string,
+  fn: (conn: PoolConnection) => Promise<T>,
+  onBusy: () => Error,
+): Promise<T> {
+  const conn = await db.getConnection();
+  try {
+    const [rows] = await conn.query<RowDataPacket[]>("SELECT GET_LOCK(?, 10) AS ok", [lockName]);
+    if (Number(rows[0]?.ok) !== 1) throw onBusy();
+    try {
+      await conn.beginTransaction();
+      try {
+        const result = await fn(conn);
+        await conn.commit();
+        return result;
+      } catch (error) {
+        await conn.rollback();
+        throw error;
+      }
+    } finally {
+      await conn.query("SELECT RELEASE_LOCK(?)", [lockName]);
+    }
   } finally {
     conn.release();
   }

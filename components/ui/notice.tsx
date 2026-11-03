@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 type Tone = "info" | "menunggu" | "dimuat" | "success" | "error" | "neutral";
 
 const tones: Record<Tone, string> = {
-  info: "border-l-4 border-steel bg-subtle text-ink",
+  info: "bg-subtle text-ink",
   menunggu: "bg-menunggu-bg text-ink",
   dimuat: "bg-dimuat-bg text-ink",
   success: "bg-selesai-bg text-ink",

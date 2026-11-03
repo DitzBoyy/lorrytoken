@@ -51,6 +51,16 @@ export async function getSlotPerTanggal(tanggal: string): Promise<SlotKuota[]> {
   return rows.map(toSlot);
 }
 
+/** Semua tanggal yang punya slot mulai hari ini (aktif maupun nonaktif), untuk halaman Kelola. */
+export async function getTanggalSlot(limit = 14): Promise<string[]> {
+  const [rows] = await db.query<RowDataPacket[]>(
+    `SELECT DISTINCT DATE_FORMAT(tanggal, '%Y-%m-%d') AS tanggal FROM slot_waktu
+     WHERE tanggal >= CURDATE() ORDER BY tanggal LIMIT ?`,
+    [limit],
+  );
+  return rows.map((row) => row.tanggal as string);
+}
+
 /** Tanggal mulai hari ini yang punya slot aktif, untuk tab tanggal di halaman pemesanan. */
 export async function getTanggalTersedia(limit = 7): Promise<string[]> {
   const [rows] = await db.query<RowDataPacket[]>(

@@ -15,12 +15,13 @@ type FieldShellProps = {
   required?: boolean;
   children: ReactNode;
   className?: string;
+  hideLabel?: boolean;
 };
 
-function FieldShell({ id, label, hint, error, required, children, className }: FieldShellProps) {
+function FieldShell({ id, label, hint, error, required, children, className, hideLabel }: FieldShellProps) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <label htmlFor={id} className="text-[0.9375rem] text-steel">
+      <label htmlFor={id} className={hideLabel ? "sr-only" : "text-[0.9375rem] text-steel"}>
         {label}
         {required && <span className="sr-only"> (wajib diisi)</span>}
       </label>
@@ -52,6 +53,8 @@ type InputProps = ComponentPropsWithRef<"input"> & {
   wrapperClassName?: string;
   /** Elemen di sisi kanan dalam kolom, misalnya tombol tampilkan kata sandi. */
   trailing?: ReactNode;
+  /** Label hanya untuk pembaca layar (judul panel sudah menjelaskan kolom). */
+  hideLabel?: boolean;
 };
 
 export function TextField({
@@ -63,6 +66,7 @@ export function TextField({
   className,
   required,
   trailing,
+  hideLabel,
   ...props
 }: InputProps) {
   const autoId = useId();
@@ -78,7 +82,15 @@ export function TextField({
     />
   );
   return (
-    <FieldShell id={fieldId} label={label} hint={hint} error={error} required={required} className={wrapperClassName}>
+    <FieldShell
+      id={fieldId}
+      label={label}
+      hint={hint}
+      error={error}
+      required={required}
+      className={wrapperClassName}
+      hideLabel={hideLabel}
+    >
       {trailing ? (
         <div className="relative">
           {input}

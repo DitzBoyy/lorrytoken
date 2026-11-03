@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
-import { serverError } from "@/lib/api";
+import { Ditolak, serverError, tolakAtauError } from "@/lib/api";
 import { requireApiRole } from "@/lib/auth";
 import { getPemesananSopir } from "@/lib/data/pemesanan";
 import { getTrukMilik } from "@/lib/data/truk";
@@ -15,17 +15,6 @@ export async function GET() {
     return NextResponse.json({ pemesanan: await getPemesananSopir(auth.user.id) });
   } catch (error) {
     return serverError(error);
-  }
-}
-
-/** Ditolak di dalam transaksi: rollback lalu kirim pesan ke sopir. */
-class Ditolak extends Error {
-  constructor(
-    message: string,
-    readonly status = 409,
-    readonly errors?: FieldErrors,
-  ) {
-    super(message);
   }
 }
 
@@ -120,9 +109,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(hasil, { status: 201 });
   } catch (error) {
-    if (error instanceof Ditolak) {
-      return NextResponse.json({ message: error.message, errors: error.errors }, { status: error.status });
-    }
-    return serverError(error);
+    return tolakAtauError(error);
   }
 }

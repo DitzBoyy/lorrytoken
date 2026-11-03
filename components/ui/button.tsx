@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "danger" | "ghost";
+type Variant = "primary" | "dark" | "secondary" | "danger" | "ghost";
 type Size = "md" | "sm";
 
 const base =
@@ -12,6 +12,9 @@ const variants: Record<Variant, string> = {
   // Aksi utama: satu per area kerja
   primary:
     "border-accent bg-accent text-ink hover:border-accent-hover hover:bg-accent-hover " +
+    "disabled:border-line disabled:bg-line-soft disabled:text-muted",
+  dark:
+    "border-ink bg-ink text-white hover:border-ink-raised hover:bg-ink-raised " +
     "disabled:border-line disabled:bg-line-soft disabled:text-muted",
   secondary:
     "border-steel bg-panel text-ink hover:bg-subtle " +

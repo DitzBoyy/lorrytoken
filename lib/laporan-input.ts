@@ -30,3 +30,14 @@ export function parsePeriode(awalInput: unknown, akhirInput: unknown): PeriodeLa
   if (errors.awal || errors.akhir) return { ok: false, awal, akhir, errors };
   return { ok: true, awal, akhir };
 }
+
+/** Pintasan periode di halaman Laporan: hari ini, 7 hari terakhir (termasuk hari ini), dan bulan ini. */
+export function pintasanPeriode(sekarang = new Date()) {
+  const hariIni = toIsoDate(sekarang);
+  const tujuhHari = toIsoDate(new Date(sekarang.getFullYear(), sekarang.getMonth(), sekarang.getDate() - 6));
+  return [
+    { label: "Hari ini", awal: hariIni, akhir: hariIni },
+    { label: "7 hari terakhir", awal: tujuhHari, akhir: hariIni },
+    { label: "Bulan ini", ...periodeBawaan(sekarang) },
+  ];
+}

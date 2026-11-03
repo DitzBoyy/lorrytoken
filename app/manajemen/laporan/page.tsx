@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/field";
 import { Notice } from "@/components/ui/notice";
@@ -11,7 +12,8 @@ import { requirePageRole } from "@/lib/auth";
 import { getLaporan } from "@/lib/data/manajemen";
 import { formatJamDari, formatTanggal, formatTanggalJam, toIsoDate } from "@/lib/format";
 import { toDateTimeString } from "@/lib/data/antrian";
-import { parsePeriode } from "@/lib/laporan-input";
+import { cn } from "@/lib/cn";
+import { parsePeriode, pintasanPeriode } from "@/lib/laporan-input";
 import type { Laporan } from "@/lib/manajemen";
 import { CetakButton } from "./cetak-button";
 
@@ -33,7 +35,8 @@ export default async function LaporanPage({ searchParams }: PageProps<"/manajeme
           Periode laporan
         </h2>
         {/* Form GET biasa: periode tersimpan di URL sehingga laporan bisa dibuka ulang atau dibagikan. */}
-        <form method="get" className="flex flex-col gap-5 md:flex-row md:flex-wrap md:items-start">
+        {/* key: kolom tanggal ikut berganti saat periode diubah lewat pintasan. */}
+        <form key={`${periode.awal}-${periode.akhir}`} method="get" className="flex flex-col gap-5 md:flex-row md:flex-wrap md:items-start">
           <TextField
             label="Tanggal awal"
             name="awal"
@@ -61,6 +64,26 @@ export default async function LaporanPage({ searchParams }: PageProps<"/manajeme
             {adaData && <CetakButton />}
           </div>
         </form>
+        <nav aria-label="Pintasan periode" className="mt-5 flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-[0.9375rem] text-steel">Pintasan</span>
+          {pintasanPeriode().map((item) => {
+            const aktif = periode.awal === item.awal && periode.akhir === item.akhir;
+            return (
+              <Link
+                key={item.label}
+                href={`/manajemen/laporan?awal=${item.awal}&akhir=${item.akhir}`}
+                scroll={false}
+                aria-current={aktif ? "page" : undefined}
+                className={cn(
+                  "inline-flex h-11 items-center rounded-sm border px-4 text-[0.9375rem] font-semibold whitespace-nowrap transition-colors duration-150 md:h-9",
+                  aktif ? "border-ink bg-ink text-white" : "border-steel bg-panel text-ink hover:bg-subtle",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </Panel>
 
       {laporan && (
